@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Laravel\Fortify\Features;
 
@@ -10,8 +11,8 @@ test('login screen can be rendered', function () {
     $response->assertOk();
 });
 
-test('users can authenticate using the login screen', function () {
-    $user = User::factory()->create();
+test('admins can authenticate using the login screen', function () {
+    $user = User::factory()->admin()->create();
 
     $response = $this->post(route('login.store'), [
         'email' => $user->email,
@@ -30,7 +31,7 @@ test('users with two factor enabled are redirected to two factor challenge', fun
         'confirmPassword' => true,
     ]);
 
-    $user = User::factory()->withTwoFactor()->create();
+    $user = User::factory()->admin()->withTwoFactor()->create();
 
     $response = $this->post(route('login'), [
         'email' => $user->email,
@@ -43,7 +44,7 @@ test('users with two factor enabled are redirected to two factor challenge', fun
 });
 
 test('users can not authenticate with invalid password', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->admin()->create();
 
     $this->post(route('login.store'), [
         'email' => $user->email,
@@ -54,7 +55,7 @@ test('users can not authenticate with invalid password', function () {
 });
 
 test('users can logout', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->admin()->create();
 
     $response = $this->actingAs($user)->post(route('logout'));
 
@@ -64,7 +65,7 @@ test('users can logout', function () {
 });
 
 test('users are rate limited', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->admin()->create();
 
     RateLimiter::increment(md5('login'.implode('|', [$user->email, '127.0.0.1'])), amount: 5);
 
@@ -74,4 +75,28 @@ test('users are rate limited', function () {
     ]);
 
     $response->assertTooManyRequests();
+});
+
+test('admin password hashes follow the rehash on login setting', function (bool $rehashOnLogin) {
+    config(['hashing.rehash_on_login' => $rehashOnLogin]);
+    $originalHash = Hash::make('password');
+    $user = User::factory()->admin()->create(['password' => $originalHash]);
+    Hash::driver()->setRounds(5);
+
+    $this->post(route('login.store'), [
+        'email' => $user->email,
+        'password' => 'password',
+    ])->assertRedirect(route('dashboard', absolute: false));
+
+    $this->assertAuthenticatedAs($user);
+    expect(Hash::needsRehash($user->refresh()->password))->toBe(! $rehashOnLogin);
+})->with(['rehashing enabled' => true, 'rehashing disabled' => false]);
+
+test('unknown accounts cannot log in', function () {
+    $this->post(route('login.store'), [
+        'email' => 'missing@example.com',
+        'password' => 'password',
+    ])->assertSessionHasErrors(['email' => trans('auth.failed')]);
+
+    $this->assertGuest();
 });
