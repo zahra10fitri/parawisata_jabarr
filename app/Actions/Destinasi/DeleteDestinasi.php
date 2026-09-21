@@ -3,7 +3,9 @@
 namespace App\Actions\Destinasi;
 
 use App\Models\Destinasi;
+use App\Models\TempatWisata;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use RuntimeException;
 
 class DeleteDestinasi
@@ -16,6 +18,9 @@ class DeleteDestinasi
 
         DB::transaction(function () use ($destinasi, &$photoCleaned): void {
             $record = Destinasi::query()->lockForUpdate()->findOrFail($destinasi->id);
+            if (TempatWisata::query()->where('destinasi_id', $record->id)->exists()) {
+                throw ValidationException::withMessages(['destinasi' => 'Destinasi masih memiliki tempat wisata. Pindahkan atau hapus tempat wisata terlebih dahulu.']);
+            }
             $path = $record->foto_utama;
 
             if (! $record->delete()) {

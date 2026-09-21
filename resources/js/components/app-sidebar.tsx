@@ -15,9 +15,15 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import { index as destinasiIndex } from '@/routes/admin/destinasi';
+import { index as tempatWisataIndex } from '@/routes/admin/tempat-wisata';
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
+    {
+        title: 'Tempat Wisata',
+        href: tempatWisataIndex(),
+        icon: MapPin,
+    },
     {
         title: 'Destinasi',
         href: destinasiIndex(),

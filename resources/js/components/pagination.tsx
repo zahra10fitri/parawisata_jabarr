@@ -16,7 +16,7 @@ export default function Pagination({
 }: PaginationProps) {
     return (
         <nav
-            aria-label="Pagination destinasi"
+            aria-label="Pagination data"
             className="flex flex-wrap items-center justify-between gap-3"
         >
             {previousUrl ? (
