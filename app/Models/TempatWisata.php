@@ -64,4 +64,10 @@ class TempatWisata extends Model
     {
         return $this->belongsToMany(Fasilitas::class, 'fasilitas_tempat_wisata', 'tempat_wisata_id', 'fasilitas_id');
     }
+
+    /** @return BelongsToMany<PaketPerjalanan, $this> */
+    public function paketPerjalanan(): BelongsToMany
+    {
+        return $this->belongsToMany(PaketPerjalanan::class, 'paket_perjalanan_tempat_wisata');
+    }
 }

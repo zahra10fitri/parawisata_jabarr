@@ -1,0 +1,1 @@
+import { Head } from '@inertiajs/react'; import PaketForm from './form'; export default function Create({options}:{options:any}) { return <div className="mx-auto max-w-4xl p-6"><Head title="Tambah Paket Perjalanan"/><h1 className="mb-6 text-2xl font-semibold">Tambah Paket Perjalanan</h1><PaketForm options={options}/></div>; }

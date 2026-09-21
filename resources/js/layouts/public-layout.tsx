@@ -44,6 +44,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
                             Jelajahi{' '}
                             <ArrowUpRight size={16} aria-hidden="true" />
                         </Link>
+                        <Link href="/paket-perjalanan" className="hidden hover:underline md:inline">Paket Perjalanan</Link>
                     </nav>
                 </div>
             </header>

@@ -6,6 +6,7 @@ use Database\Factories\DestinasiFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
 
 /**
@@ -33,6 +34,12 @@ class Destinasi extends Model
     use HasFactory;
 
     protected $table = 'destinasi';
+
+    /** @return BelongsToMany<PaketPerjalanan, $this> */
+    public function paketPerjalanan(): BelongsToMany
+    {
+        return $this->belongsToMany(PaketPerjalanan::class, 'destinasi_paket_perjalanan');
+    }
 
     /**
      * @return array<string, string>

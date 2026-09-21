@@ -19,6 +19,7 @@ import { index as tempatWisataIndex } from '@/routes/admin/tempat-wisata';
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
+    { title: 'Paket Perjalanan', href: '/admin/paket-perjalanan', icon: MapPin },
     {
         title: 'Tempat Wisata',
         href: tempatWisataIndex(),
