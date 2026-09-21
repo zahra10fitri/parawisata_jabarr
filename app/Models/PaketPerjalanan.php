@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable(['nama', 'slug', 'deskripsi', 'foto_utama', 'durasi_hari', 'harga_mulai', 'highlight', 'termasuk', 'tidak_termasuk', 'status', 'unggulan', 'urutan'])]
 class PaketPerjalanan extends Model
@@ -31,5 +32,11 @@ class PaketPerjalanan extends Model
     public function tempatWisata(): BelongsToMany
     {
         return $this->belongsToMany(TempatWisata::class, 'paket_perjalanan_tempat_wisata');
+    }
+
+    /** @return HasMany<Itinerary, $this> */
+    public function itinerary(): HasMany
+    {
+        return $this->hasMany(Itinerary::class)->orderBy('urutan')->orderBy('hari_ke');
     }
 }

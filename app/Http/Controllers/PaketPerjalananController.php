@@ -24,15 +24,15 @@ class PaketPerjalananController extends Controller
             $query->whereHas('tempatWisata.pengalaman', fn ($q) => $q->whereKey($filters['pengalaman_id']));
         }
 
-return Inertia::render('paket-perjalanan/index', ['paketPerjalanan' => $query->orderByDesc('unggulan')->orderBy('urutan')->paginate(12)->withQueryString()->through(fn (PaketPerjalanan $paket) => $this->summary($paket)), 'filters' => $filters, 'destinasiOptions' => Destinasi::orderBy('nama')->get(['id', 'nama']), 'pengalamanOptions' => Pengalaman::orderBy('nama')->get(['id', 'nama'])]);
+        return Inertia::render('paket-perjalanan/index', ['paketPerjalanan' => $query->orderByDesc('unggulan')->orderBy('urutan')->paginate(12)->withQueryString()->through(fn (PaketPerjalanan $paket) => $this->summary($paket)), 'filters' => $filters, 'destinasiOptions' => Destinasi::orderBy('nama')->get(['id', 'nama']), 'pengalamanOptions' => Pengalaman::orderBy('nama')->get(['id', 'nama'])]);
     }
 
     public function show(PaketPerjalanan $paketPerjalanan): Response
     {
         abort_unless($paketPerjalanan->status, 404);
-        $paketPerjalanan->load(['destinasi:id,nama', 'tempatWisata:id,nama,slug,destinasi_id']);
+        $paketPerjalanan->load(['destinasi:id,nama', 'tempatWisata:id,nama,slug,destinasi_id', 'itinerary.kegiatan']);
 
-        return Inertia::render('paket-perjalanan/show', ['paketPerjalanan' => [...$this->summary($paketPerjalanan), ...$paketPerjalanan->only(['deskripsi', 'highlight', 'termasuk', 'tidak_termasuk']), 'tempat_wisata' => $paketPerjalanan->tempatWisata->map->only(['id', 'nama', 'slug'])->all()]]);
+        return Inertia::render('paket-perjalanan/show', ['paketPerjalanan' => [...$this->summary($paketPerjalanan), ...$paketPerjalanan->only(['deskripsi', 'highlight', 'termasuk', 'tidak_termasuk']), 'tempat_wisata' => $paketPerjalanan->tempatWisata->map->only(['id', 'nama', 'slug'])->all(), 'itinerary' => $paketPerjalanan->itinerary->map(fn ($hari): array => [...$hari->only(['id', 'hari_ke', 'judul']), 'kegiatan' => $hari->kegiatan->map->only(['id', 'judul', 'keterangan', 'waktu'])->all()])->all()]]);
     }
 
     private function summary(PaketPerjalanan $paket): array
