@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\DestinasiController;
 use App\Http\Controllers\Admin\ItineraryController;
 use App\Http\Controllers\Admin\PaketPerjalananController as AdminPaketPerjalananController;
 use App\Http\Controllers\Admin\TempatWisataController;
+use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\JelajahiController;
 use App\Http\Controllers\PaketPerjalananController;
 use Illuminate\Support\Facades\Route;
@@ -14,6 +15,8 @@ Route::get('jelajahi', [JelajahiController::class, 'index'])->name('jelajahi.ind
 Route::get('jelajahi/{tempatWisata:slug}', [JelajahiController::class, 'show'])->name('jelajahi.show');
 Route::get('paket-perjalanan', [PaketPerjalananController::class, 'index'])->name('paket-perjalanan.index');
 Route::get('paket-perjalanan/{paketPerjalanan:slug}', [PaketPerjalananController::class, 'show'])->name('paket-perjalanan.show');
+Route::get('rencanakan-perjalanan', [InquiryController::class, 'create'])->name('inquiry.create');
+Route::post('rencanakan-perjalanan', [InquiryController::class, 'store'])->name('inquiry.store');
 
 Route::middleware(['auth', 'can:access-admin', 'verified'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');

@@ -41,6 +41,12 @@ class Destinasi extends Model
         return $this->belongsToMany(PaketPerjalanan::class, 'destinasi_paket_perjalanan');
     }
 
+    /** @return BelongsToMany<Inquiry, $this> */
+    public function inquiry(): BelongsToMany
+    {
+        return $this->belongsToMany(Inquiry::class, 'destinasi_inquiry');
+    }
+
     /**
      * @return array<string, string>
      */

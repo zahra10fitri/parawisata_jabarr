@@ -6,6 +6,7 @@ use Database\Factories\PengalamanFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
 
 /**
@@ -25,6 +26,12 @@ class Pengalaman extends Model
     use HasFactory;
 
     protected $table = 'pengalaman';
+
+    /** @return BelongsToMany<Inquiry, $this> */
+    public function inquiry(): BelongsToMany
+    {
+        return $this->belongsToMany(Inquiry::class, 'inquiry_pengalaman');
+    }
 
     /**
      * @return array<string, string>

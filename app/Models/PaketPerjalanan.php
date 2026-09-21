@@ -39,4 +39,10 @@ class PaketPerjalanan extends Model
     {
         return $this->hasMany(Itinerary::class)->orderBy('urutan')->orderBy('hari_ke');
     }
+
+    /** @return HasMany<Inquiry, $this> */
+    public function inquiry(): HasMany
+    {
+        return $this->hasMany(Inquiry::class);
+    }
 }
