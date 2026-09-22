@@ -3,6 +3,7 @@
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Route;
 
 dataset('admin endpoints', [
     'dashboard' => ['GET', '/dashboard'],
@@ -109,3 +110,26 @@ test('admins can open settings pages', function (string $routeName) {
 
     $this->actingAs($user)->get(route($routeName))->assertOk();
 })->with(['security.edit', 'appearance.edit']);
+
+test('every admin route retains authentication authorization and verification middleware', function () {
+    $adminRoutes = collect(Route::getRoutes()->getRoutes())->filter(fn ($route): bool => $route->getName() === 'dashboard' || str_starts_with((string) $route->getName(), 'admin.'));
+
+    expect($adminRoutes)->not->toBeEmpty();
+    $adminRoutes->each(function ($route): void {
+        expect($route->middleware())
+            ->toContain('auth')
+            ->toContain('can:access-admin')
+            ->toContain('verified');
+    });
+});
+
+test('web middleware stack keeps csrf validation enabled', function () {
+    app()->detectEnvironment(fn (): string => 'production');
+
+    $this->post(route('kontak.store'), [
+        'nama' => 'Pengunjung',
+        'email' => 'pengunjung@example.com',
+        'subjek' => 'Pertanyaan',
+        'pesan' => 'Pesan tanpa token CSRF.',
+    ])->assertStatus(419);
+});
