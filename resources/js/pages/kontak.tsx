@@ -1,0 +1,21 @@
+import { Head, useForm } from '@inertiajs/react';
+import { Clock3, Mail, MapPin, MessageCircle } from 'lucide-react';
+import type { FormEvent } from 'react';
+import InputError from '@/components/input-error';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useFlashToast } from '@/hooks/use-flash-toast';
+import PublicLayout from '@/layouts/public-layout';
+
+export default function Kontak() {
+    useFlashToast();
+    const form = useForm({ nama: '', email: '', whatsapp: '', subjek: '', pesan: '' });
+    const submit = (event: FormEvent) => { event.preventDefault(); form.post('/kontak', { preserveScroll: true, onSuccess: () => form.reset() }); };
+    return <PublicLayout><Head title="Kontak" />
+        <section className="bg-[#123f2c] text-white"><div className="mx-auto max-w-7xl px-6 py-20 sm:px-8 lg:py-28"><p className="text-sm font-semibold uppercase tracking-[.22em] text-[#c9e7bb]">Hubungi kami</p><h1 className="mt-5 max-w-3xl font-serif text-5xl leading-tight sm:text-6xl">Mari mulai percakapan tentang perjalanan Anda.</h1><p className="mt-5 max-w-2xl text-lg leading-8 text-white/70">Ada pertanyaan, ide perjalanan, atau butuh bantuan memilih pengalaman? Kirimkan pesan dan tim kami akan membantu.</p></div></section>
+        <section className="mx-auto grid max-w-7xl gap-12 px-6 py-16 sm:px-8 lg:grid-cols-[.78fr_1.22fr] lg:py-24"><aside><p className="text-sm font-semibold uppercase tracking-[.2em] text-[#568061]">Informasi kontak</p><h2 className="mt-4 font-serif text-4xl">Kami siap mendengar.</h2><div className="mt-10 space-y-5">{[[Mail, 'Email', 'halo@jelajahjabar.id'], [MessageCircle, 'WhatsApp', '+62 812 3456 7890'], [MapPin, 'Lokasi', 'Jawa Barat, Indonesia'], [Clock3, 'Waktu layanan', 'Senin–Jumat, 09.00–17.00 WIB']].map(([Icon, label, value]) => { const ContactIcon = Icon as typeof Mail; return <div key={label as string} className="flex gap-4 rounded-2xl border border-[#173c30]/10 bg-white p-5"><span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#e1edda] text-[#17613f]"><ContactIcon size={20}/></span><div><p className="text-sm text-[#6b7d72]">{label as string}</p><p className="mt-1 font-semibold">{value as string}</p></div></div>; })}</div></aside>
+            <form onSubmit={submit} className="rounded-[2rem] bg-white p-6 shadow-[0_24px_70px_rgba(23,60,48,.09)] sm:p-10"><div className="grid gap-5 sm:grid-cols-2"><label className="space-y-2"><Label htmlFor="nama">Nama lengkap *</Label><Input id="nama" required maxLength={255} value={form.data.nama} onChange={e => form.setData('nama', e.target.value)} /><InputError message={form.errors.nama}/></label><label className="space-y-2"><Label htmlFor="email">Email *</Label><Input id="email" type="email" required maxLength={255} value={form.data.email} onChange={e => form.setData('email', e.target.value)} /><InputError message={form.errors.email}/></label><label className="space-y-2"><Label htmlFor="whatsapp">WhatsApp <span className="font-normal text-[#6b7d72]">(opsional)</span></Label><Input id="whatsapp" type="tel" maxLength={30} value={form.data.whatsapp} onChange={e => form.setData('whatsapp', e.target.value)} /><InputError message={form.errors.whatsapp}/></label><label className="space-y-2"><Label htmlFor="subjek">Subjek *</Label><Input id="subjek" required maxLength={255} value={form.data.subjek} onChange={e => form.setData('subjek', e.target.value)} /><InputError message={form.errors.subjek}/></label></div><label className="mt-5 block space-y-2"><Label htmlFor="pesan">Pesan *</Label><textarea id="pesan" required rows={7} maxLength={10000} className="w-full rounded-xl border border-[#173c30]/20 bg-transparent px-3 py-3 text-sm outline-none focus:border-[#17613f] focus:ring-2 focus:ring-[#17613f]/15" value={form.data.pesan} onChange={e => form.setData('pesan', e.target.value)} placeholder="Ceritakan yang dapat kami bantu..."/><InputError message={form.errors.pesan}/></label><Button disabled={form.processing} className="mt-6 w-full rounded-full bg-[#17613f] py-6 text-white hover:bg-[#0c4d31]">{form.processing ? 'Mengirim...' : 'Kirim Pesan'}</Button></form>
+        </section>
+    </PublicLayout>;
+}

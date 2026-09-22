@@ -6,13 +6,16 @@ use App\Http\Controllers\Admin\InquiryController as AdminInquiryController;
 use App\Http\Controllers\Admin\ItineraryController;
 use App\Http\Controllers\Admin\KategoriArtikelController;
 use App\Http\Controllers\Admin\PaketPerjalananController as AdminPaketPerjalananController;
+use App\Http\Controllers\Admin\PesanKontakController as AdminPesanKontakController;
 use App\Http\Controllers\Admin\TempatWisataController;
 use App\Http\Controllers\GlobalSearchController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\InspirasiController;
 use App\Http\Controllers\JelajahiController;
+use App\Http\Controllers\KontakController;
 use App\Http\Controllers\PaketPerjalananController;
+use App\Http\Controllers\TentangController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -26,11 +29,18 @@ Route::get('rencanakan-perjalanan', [InquiryController::class, 'create'])->name(
 Route::post('rencanakan-perjalanan', [InquiryController::class, 'store'])->name('inquiry.store');
 Route::get('inspirasi', [InspirasiController::class, 'index'])->name('inspirasi.index');
 Route::get('inspirasi/{artikel:slug}', [InspirasiController::class, 'show'])->name('inspirasi.show');
+Route::get('tentang', TentangController::class)->name('tentang');
+Route::get('kontak', [KontakController::class, 'create'])->name('kontak.create');
+Route::post('kontak', [KontakController::class, 'store'])->name('kontak.store');
 
 Route::middleware(['auth', 'can:access-admin', 'verified'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');
 
     Route::prefix('admin')->name('admin.')->group(function (): void {
+        Route::get('pesan-kontak', [AdminPesanKontakController::class, 'index'])->name('pesan-kontak.index');
+        Route::get('pesan-kontak/{pesanKontak}', [AdminPesanKontakController::class, 'show'])->name('pesan-kontak.show');
+        Route::patch('pesan-kontak/{pesanKontak}/status-baca', [AdminPesanKontakController::class, 'toggleRead'])->name('pesan-kontak.toggle-read');
+        Route::delete('pesan-kontak/{pesanKontak}', [AdminPesanKontakController::class, 'destroy'])->name('pesan-kontak.destroy');
         Route::get('permintaan-perjalanan', [AdminInquiryController::class, 'index'])->name('inquiry.index');
         Route::resource('kategori-artikel', KategoriArtikelController::class)->only(['index', 'store', 'update', 'destroy'])->parameters(['kategori-artikel' => 'kategori_artikel']);
         Route::resource('artikel', ArtikelController::class)->parameters(['artikel' => 'artikel']);
