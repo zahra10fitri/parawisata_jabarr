@@ -47,7 +47,7 @@ class JelajahiController extends Controller
     public function show(TempatWisata $tempatWisata): Response
     {
         abort_unless($tempatWisata->status, 404);
-        $tempatWisata->load(['destinasi:id,nama', 'pengalaman:id,nama', 'aktivitas:id,nama', 'fasilitas:id,nama', 'galeri']);
+        $tempatWisata->load(['destinasi:id,nama,slug', 'pengalaman:id,nama', 'aktivitas:id,nama', 'fasilitas:id,nama', 'galeri']);
 
         return Inertia::render('jelajahi/show', [
             'wisata' => [
@@ -68,7 +68,7 @@ class JelajahiController extends Controller
         return [
             ...$wisata->only(['id', 'nama', 'slug', 'deskripsi_singkat', 'lokasi', 'harga_tiket', 'unggulan']),
             'foto_url' => $wisata->foto_utama === null ? null : Storage::disk('public')->url($wisata->foto_utama),
-            'destinasi' => $wisata->destinasi->only(['id', 'nama']),
+            'destinasi' => $wisata->destinasi->only(['id', 'nama', 'slug']),
             'pengalaman' => $wisata->pengalaman->map->only(['id', 'nama'])->all(),
         ];
     }

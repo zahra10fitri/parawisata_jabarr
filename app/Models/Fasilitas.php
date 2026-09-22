@@ -6,6 +6,7 @@ use Database\Factories\FasilitasFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
 
 /**
@@ -23,6 +24,12 @@ class Fasilitas extends Model
     use HasFactory;
 
     protected $table = 'fasilitas';
+
+    /** @return BelongsToMany<TempatWisata, $this> */
+    public function tempatWisata(): BelongsToMany
+    {
+        return $this->belongsToMany(TempatWisata::class, 'fasilitas_tempat_wisata', 'fasilitas_id', 'tempat_wisata_id');
+    }
 
     /**
      * @return array<string, string>

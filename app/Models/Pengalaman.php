@@ -33,6 +33,12 @@ class Pengalaman extends Model
         return $this->belongsToMany(Inquiry::class, 'inquiry_pengalaman');
     }
 
+    /** @return BelongsToMany<TempatWisata, $this> */
+    public function tempatWisata(): BelongsToMany
+    {
+        return $this->belongsToMany(TempatWisata::class, 'pengalaman_tempat_wisata', 'pengalaman_id', 'tempat_wisata_id');
+    }
+
     /**
      * @return array<string, string>
      */

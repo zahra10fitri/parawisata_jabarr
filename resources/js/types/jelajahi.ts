@@ -1,4 +1,4 @@
-export type ExploreOption = { id: number; nama: string };
+export type ExploreOption = { id: number; nama: string; slug?: string };
 export type ExploreWisata = {
     id: number;
     nama: string;

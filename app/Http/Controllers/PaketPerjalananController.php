@@ -15,7 +15,7 @@ class PaketPerjalananController extends Controller
     public function index(PaketPerjalananRequest $request): Response
     {
         $filters = ['destinasi_id' => (string) ($request->validated('destinasi_id') ?? ''), 'durasi' => (string) ($request->validated('durasi') ?? ''), 'pengalaman_id' => (string) ($request->validated('pengalaman_id') ?? '')];
-        $query = PaketPerjalanan::where('status', true)->with(['destinasi:id,nama', 'tempatWisata.pengalaman']);
+        $query = PaketPerjalanan::where('status', true)->with(['destinasi:id,nama,slug', 'tempatWisata.pengalaman']);
         if ($filters['destinasi_id'] !== '') {
             $query->whereHas('destinasi', fn ($q) => $q->whereKey($filters['destinasi_id']));
         } if ($filters['durasi'] !== '') {
@@ -30,7 +30,7 @@ class PaketPerjalananController extends Controller
     public function show(PaketPerjalanan $paketPerjalanan): Response
     {
         abort_unless($paketPerjalanan->status, 404);
-        $paketPerjalanan->load(['destinasi:id,nama', 'tempatWisata:id,nama,slug,destinasi_id', 'itinerary.kegiatan']);
+        $paketPerjalanan->load(['destinasi:id,nama,slug', 'tempatWisata:id,nama,slug,destinasi_id', 'itinerary.kegiatan']);
 
         return Inertia::render('paket-perjalanan/show', ['paketPerjalanan' => [...$this->summary($paketPerjalanan), ...$paketPerjalanan->only(['deskripsi', 'highlight', 'termasuk', 'tidak_termasuk']), 'tempat_wisata' => $paketPerjalanan->tempatWisata->map->only(['id', 'nama', 'slug'])->all(), 'itinerary' => $paketPerjalanan->itinerary->map(fn ($hari): array => [...$hari->only(['id', 'hari_ke', 'judul']), 'kegiatan' => $hari->kegiatan->map->only(['id', 'judul', 'keterangan', 'waktu'])->all()])->all()]]);
     }

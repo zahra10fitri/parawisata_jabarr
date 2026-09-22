@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { BookOpen, FileText, FolderGit2, LayoutGrid, Mail, MailQuestion, MapPin, Tags } from 'lucide-react';
+import { BookOpen, Compass, FileText, FolderGit2, LayoutGrid, ListChecks, Mail, MailQuestion, MapPin, Sparkles, Tags } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -34,6 +34,9 @@ const mainNavItems: NavItem[] = [
         href: destinasiIndex(),
         icon: MapPin,
     },
+    { title: 'Pengalaman', href: '/admin/pengalaman', icon: Sparkles },
+    { title: 'Aktivitas', href: '/admin/aktivitas', icon: Compass },
+    { title: 'Fasilitas', href: '/admin/fasilitas', icon: ListChecks },
     {
         title: 'Dashboard',
         href: dashboard(),

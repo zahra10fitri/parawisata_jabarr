@@ -1,14 +1,18 @@
 <?php
 
+use App\Http\Controllers\Admin\AktivitasController;
 use App\Http\Controllers\Admin\ArtikelController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DestinasiController;
+use App\Http\Controllers\Admin\FasilitasController;
 use App\Http\Controllers\Admin\InquiryController as AdminInquiryController;
 use App\Http\Controllers\Admin\ItineraryController;
 use App\Http\Controllers\Admin\KategoriArtikelController;
 use App\Http\Controllers\Admin\PaketPerjalananController as AdminPaketPerjalananController;
+use App\Http\Controllers\Admin\PengalamanController;
 use App\Http\Controllers\Admin\PesanKontakController as AdminPesanKontakController;
 use App\Http\Controllers\Admin\TempatWisataController;
+use App\Http\Controllers\DestinasiController as PublicDestinasiController;
 use App\Http\Controllers\GlobalSearchController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InquiryController;
@@ -24,6 +28,7 @@ Route::get('pencarian', [GlobalSearchController::class, 'index'])->name('pencari
 
 Route::get('jelajahi', [JelajahiController::class, 'index'])->name('jelajahi.index');
 Route::get('jelajahi/{tempatWisata:slug}', [JelajahiController::class, 'show'])->name('jelajahi.show');
+Route::get('destinasi/{destinasi:slug}', PublicDestinasiController::class)->name('destinasi.show');
 Route::get('paket-perjalanan', [PaketPerjalananController::class, 'index'])->name('paket-perjalanan.index');
 Route::get('paket-perjalanan/{paketPerjalanan:slug}', [PaketPerjalananController::class, 'show'])->name('paket-perjalanan.show');
 Route::get('rencanakan-perjalanan', [InquiryController::class, 'create'])->name('inquiry.create');
@@ -48,6 +53,9 @@ Route::middleware(['auth', 'can:access-admin', 'verified'])->group(function () {
         Route::get('permintaan-perjalanan/{inquiry}', [AdminInquiryController::class, 'show'])->name('inquiry.show');
         Route::patch('permintaan-perjalanan/{inquiry}/status', [AdminInquiryController::class, 'updateStatus'])->name('inquiry.status.update');
         Route::resource('destinasi', DestinasiController::class)->parameters(['destinasi' => 'destinasi']);
+        Route::resource('pengalaman', PengalamanController::class)->only(['index', 'store', 'update', 'destroy'])->parameters(['pengalaman' => 'pengalaman']);
+        Route::resource('aktivitas', AktivitasController::class)->only(['index', 'store', 'update', 'destroy'])->parameters(['aktivitas' => 'aktivitas']);
+        Route::resource('fasilitas', FasilitasController::class)->only(['index', 'store', 'update', 'destroy'])->parameters(['fasilitas' => 'fasilitas']);
         Route::resource('tempat-wisata', TempatWisataController::class)->parameters(['tempat-wisata' => 'tempat_wisata']);
         Route::resource('paket-perjalanan', AdminPaketPerjalananController::class)->parameters(['paket-perjalanan' => 'paket_perjalanan']);
         Route::prefix('paket-perjalanan/{paket_perjalanan}/itinerary')->name('paket-perjalanan.itinerary.')->group(function (): void {

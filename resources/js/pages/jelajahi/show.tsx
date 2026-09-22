@@ -25,9 +25,7 @@ export default function DetailWisata({ wisata }: { wisata: ExploreDetail }) {
                 </Link>
                 <div className="mb-8 max-w-4xl">
                     <Link
-                        href={index({
-                            query: { destinasi_id: wisata.destinasi.id },
-                        })}
+                        href={`/destinasi/${wisata.destinasi.slug}`}
                         className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-[0.15em] text-[#587064] uppercase"
                     >
                         <MapPin size={15} aria-hidden="true" />
