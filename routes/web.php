@@ -7,13 +7,16 @@ use App\Http\Controllers\Admin\ItineraryController;
 use App\Http\Controllers\Admin\KategoriArtikelController;
 use App\Http\Controllers\Admin\PaketPerjalananController as AdminPaketPerjalananController;
 use App\Http\Controllers\Admin\TempatWisataController;
+use App\Http\Controllers\GlobalSearchController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\InspirasiController;
 use App\Http\Controllers\JelajahiController;
 use App\Http\Controllers\PaketPerjalananController;
 use Illuminate\Support\Facades\Route;
 
-Route::inertia('/', 'welcome')->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('pencarian', [GlobalSearchController::class, 'index'])->name('pencarian.index');
 
 Route::get('jelajahi', [JelajahiController::class, 'index'])->name('jelajahi.index');
 Route::get('jelajahi/{tempatWisata:slug}', [JelajahiController::class, 'show'])->name('jelajahi.show');
