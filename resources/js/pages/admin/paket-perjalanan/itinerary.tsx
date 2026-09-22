@@ -9,7 +9,7 @@ type Hari = { id: number; hari_ke: number; judul: string | null; urutan: number;
 
 function HariForm({ paketId, hari }: { paketId: number; hari: Hari }) {
     const form = useForm({ hari_ke: hari.hari_ke, judul: hari.judul ?? '', urutan: hari.urutan });
-    return <form className="flex flex-wrap items-end gap-2" onSubmit={event => { event.preventDefault(); form.put(`/admin/paket-perjalanan/${paketId}/itinerary/${hari.id}`, { preserveScroll: true }); }}><label><Label>Hari ke-</Label><Input className="w-24" type="number" min={1} max={365} required value={form.data.hari_ke} onChange={event => form.setData('hari_ke', Number(event.target.value))} /></label><label><Label>Judul hari</Label><Input className="w-64 max-w-full" value={form.data.judul} onChange={event => form.setData('judul', event.target.value)} /></label><Button size="sm" variant="outline" disabled={form.processing}>Simpan hari</Button>{form.errors.hari_ke && <span className="text-destructive text-sm">{form.errors.hari_ke}</span>}</form>;
+    return <form className="grid items-end gap-2 sm:grid-cols-[100px_minmax(0,1fr)_auto]" onSubmit={event => { event.preventDefault(); form.put(`/admin/paket-perjalanan/${paketId}/itinerary/${hari.id}`, { preserveScroll: true }); }}><label className="min-w-0"><Label>Hari ke-</Label><Input className="w-full" type="number" min={1} max={365} required value={form.data.hari_ke} onChange={event => form.setData('hari_ke', Number(event.target.value))} /></label><label className="min-w-0"><Label>Judul hari</Label><Input className="w-full" value={form.data.judul} onChange={event => form.setData('judul', event.target.value)} /></label><Button className="w-full sm:w-auto" size="sm" variant="outline" disabled={form.processing}>Simpan hari</Button>{form.errors.hari_ke && <span className="text-destructive text-sm sm:col-span-3">{form.errors.hari_ke}</span>}</form>;
 }
 
 function KegiatanForm({ paketId, hari, kegiatan }: { paketId: number; hari: Hari; kegiatan?: Kegiatan }) {
@@ -19,7 +19,7 @@ function KegiatanForm({ paketId, hari, kegiatan }: { paketId: number; hari: Hari
     return <form onSubmit={submit} className="grid gap-2 rounded-lg border bg-background p-3 md:grid-cols-[1fr_130px_auto]">
         <div className="space-y-2"><Input required placeholder="Judul kegiatan" value={form.data.judul} onChange={e => form.setData('judul', e.target.value)} /><textarea className="border-input w-full rounded-md border px-3 py-2 text-sm" rows={2} placeholder="Keterangan opsional" value={form.data.keterangan} onChange={e => form.setData('keterangan', e.target.value)} /></div>
         <Input aria-label="Waktu" type="time" value={form.data.waktu} onChange={e => form.setData('waktu', e.target.value)} />
-        <div className="flex gap-2"><Button size="sm" disabled={form.processing}>{kegiatan ? 'Simpan' : 'Tambah'}</Button>{kegiatan && <Button type="button" size="sm" variant="destructive" onClick={() => confirm('Hapus kegiatan?') && router.delete(url, { preserveScroll: true })}>Hapus</Button>}</div>
+        <div className="flex flex-wrap gap-2"><Button className="flex-1 md:flex-none" size="sm" disabled={form.processing}>{kegiatan ? 'Simpan' : 'Tambah'}</Button>{kegiatan && <Button className="flex-1 md:flex-none" type="button" size="sm" variant="destructive" onClick={() => confirm('Hapus kegiatan?') && router.delete(url, { preserveScroll: true })}>Hapus</Button>}</div>
     </form>;
 }
 

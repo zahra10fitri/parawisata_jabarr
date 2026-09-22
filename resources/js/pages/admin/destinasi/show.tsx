@@ -14,7 +14,7 @@ export default function ShowDestinasi({ destinasi }: { destinasi: Destinasi }) {
                 <h1 className="min-w-0 text-2xl font-semibold break-words">
                     {destinasi.nama}
                 </h1>
-                <div className="flex items-center gap-2">
+                <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
                     <Button asChild>
                         <Link href={edit(destinasi.id)}>Edit</Link>
                     </Button>

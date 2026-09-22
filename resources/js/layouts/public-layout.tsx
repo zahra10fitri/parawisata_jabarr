@@ -1,17 +1,22 @@
 import { Link } from '@inertiajs/react';
-import { ArrowRight, Instagram, Leaf, Mail, Search, Youtube } from 'lucide-react';
+import { ArrowRight, Instagram, Leaf, Mail, Menu, Search, X, Youtube } from 'lucide-react';
+import { useState } from 'react';
 import type { ReactNode } from 'react';
 import { home } from '@/routes';
 
 export default function PublicLayout({ children }: { children: ReactNode }) {
-    return <div className="min-h-screen bg-[#fbfaf4] text-[#173c30] scheme-light selection:bg-[#d7e8cc] [&_a:focus-visible]:outline-2 [&_a:focus-visible]:outline-offset-4 [&_button:focus-visible]:outline-2 [&_button:focus-visible]:outline-offset-4">
+    const [menuOpen, setMenuOpen] = useState(false);
+    const navigation = [['Beranda', home()], ['Jelajahi', '/jelajahi'], ['Paket Perjalanan', '/paket-perjalanan'], ['Inspirasi', '/inspirasi'], ['Tentang', '/tentang'], ['Kontak', '/kontak']] as const;
+
+    return <div data-public-layout className="min-h-screen overflow-x-clip bg-[#fbfaf4] text-[#173c30] scheme-light selection:bg-[#d7e8cc] [&_a:focus-visible]:outline-2 [&_a:focus-visible]:outline-offset-4 [&_button:focus-visible]:outline-2 [&_button:focus-visible]:outline-offset-4">
         <a href="#konten" className="sr-only z-50 bg-white p-4 focus:not-sr-only focus:fixed">Langsung ke konten</a>
         <header className="relative z-40 border-b border-[#173c30]/10 bg-[#fbfaf4]/95 backdrop-blur">
-            <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-5 px-5 sm:px-8">
+            <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-2 px-4 sm:gap-5 sm:px-8">
                 <Link href={home()} className="flex shrink-0 items-center gap-2.5" aria-label="Jelajah Jabar — Beranda"><span className="flex size-10 items-center justify-center rounded-full bg-[#17613f] text-white"><Leaf size={21}/></span><span><strong className="block font-serif text-lg leading-none">Jelajah Jabar</strong><small className="mt-1 hidden text-[9px] uppercase tracking-[.16em] text-[#6b7d72] sm:block">Alam, Budaya, Cerita</small></span></Link>
-                <nav aria-label="Navigasi publik" className="hidden items-center gap-6 text-sm font-medium lg:flex"><Link href={home()} className="text-[#17613f]">Beranda</Link><Link href="/jelajahi" className="hover:text-[#17613f]">Jelajahi</Link><Link href="/paket-perjalanan" className="hover:text-[#17613f]">Paket Perjalanan</Link><Link href="/inspirasi" className="hover:text-[#17613f]">Inspirasi</Link><Link href="/tentang" className="hover:text-[#17613f]">Tentang</Link><Link href="/kontak" className="hover:text-[#17613f]">Kontak</Link></nav>
-                <div className="flex items-center gap-2"><Link href="/pencarian" aria-label="Cari seluruh Jelajah Jabar" className="flex size-10 items-center justify-center rounded-full text-[#173c30] transition hover:bg-[#e8eee3]"><Search size={19}/></Link><Link href="/rencanakan-perjalanan" className="inline-flex items-center gap-2 rounded-xl bg-[#17613f] px-4 py-3 text-xs font-semibold text-white transition hover:bg-[#104d31] sm:px-5 sm:text-sm">Rencanakan <span className="hidden sm:inline">Perjalanan</span><ArrowRight size={15}/></Link></div>
+                <nav aria-label="Navigasi publik" className="hidden items-center gap-6 text-sm font-medium lg:flex">{navigation.map(([label, href]) => <Link key={label} href={href} className="hover:text-[#17613f]">{label}</Link>)}</nav>
+                <div className="flex items-center gap-1 sm:gap-2"><Link href="/pencarian" aria-label="Cari seluruh Jelajah Jabar" className="flex size-11 items-center justify-center rounded-full text-[#173c30] transition hover:bg-[#e8eee3]"><Search size={19}/></Link><Link href="/rencanakan-perjalanan" className="hidden items-center gap-2 rounded-xl bg-[#17613f] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#104d31] sm:inline-flex">Rencanakan Perjalanan<ArrowRight size={15}/></Link><button type="button" className="flex size-11 items-center justify-center rounded-full transition hover:bg-[#e8eee3] lg:hidden" aria-label={menuOpen ? 'Tutup menu' : 'Buka menu'} aria-expanded={menuOpen} onClick={() => setMenuOpen(value => !value)}>{menuOpen ? <X size={22}/> : <Menu size={22}/>}</button></div>
             </div>
+            {menuOpen && <nav aria-label="Navigasi mobile" className="absolute inset-x-0 top-full border-t border-[#173c30]/10 bg-[#fbfaf4] px-4 py-4 shadow-xl lg:hidden"><div className="mx-auto grid max-w-7xl gap-1">{navigation.map(([label, href]) => <Link key={label} href={href} onClick={() => setMenuOpen(false)} className="rounded-xl px-4 py-3 text-sm font-medium hover:bg-[#e8eee3]">{label}</Link>)}<Link href="/rencanakan-perjalanan" onClick={() => setMenuOpen(false)} className="mt-2 flex items-center justify-between rounded-xl bg-[#17613f] px-4 py-3 text-sm font-semibold text-white">Rencanakan Perjalanan <ArrowRight size={16}/></Link></div></nav>}
         </header>
         <main id="konten">{children}</main>
         <footer className="bg-[#073d27] text-white">

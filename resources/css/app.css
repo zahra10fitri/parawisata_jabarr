@@ -61,7 +61,19 @@
     --color-sidebar-ring: var(--sidebar-ring);
 }
 
+@media (max-width: 767px) {
+    input:not([type='checkbox']):not([type='radio']):not([type='file']),
+    select {
+        min-height: 2.75rem;
+    }
+}
+
 :root {
+    --jelajah-green: #17613f;
+    --jelajah-green-dark: #073d27;
+    --jelajah-cream: #fbfaf4;
+    --jelajah-sage: #e8eee3;
+    --jelajah-copy: #587064;
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
     --card: oklch(1 0 0);
@@ -95,6 +107,94 @@
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.87 0 0);
+}
+
+@layer components {
+    [data-public-layout] main {
+        min-width: 0;
+    }
+
+    [data-public-layout] main :is(a, button, input, select, textarea) {
+        transition-duration: 200ms;
+        transition-property: color, background-color, border-color, box-shadow,
+            opacity, transform;
+        transition-timing-function: ease-out;
+    }
+
+    [data-public-layout] main :is(input, select, textarea):focus-visible {
+        border-color: color-mix(in srgb, var(--jelajah-green) 70%, white);
+        box-shadow: 0 0 0 3px rgb(23 97 63 / 12%);
+        outline: none;
+    }
+
+    [data-public-layout] main img {
+        display: block;
+        background-color: var(--jelajah-sage);
+    }
+
+    [data-public-layout] main article:has(a):hover {
+        box-shadow: 0 16px 40px rgb(23 60 48 / 10%);
+        transform: translateY(-2px);
+    }
+
+    [data-public-layout] main .border-dashed {
+        background-color: rgb(232 238 227 / 45%);
+    }
+
+    [data-admin-layout] {
+        background-color: color-mix(in oklch, var(--background) 97%, var(--muted));
+    }
+
+    [data-admin-layout] :is(input, select, textarea) {
+        transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    [data-admin-layout] :is(select, textarea) {
+        border-color: var(--input);
+        border-radius: var(--radius-lg);
+        background-color: var(--background);
+    }
+
+    [data-admin-layout] :is(input, select, textarea):focus-visible {
+        border-color: var(--ring);
+        box-shadow: 0 0 0 3px color-mix(in oklch, var(--ring) 35%, transparent);
+        outline: none;
+    }
+
+    [data-admin-layout] table {
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    [data-admin-layout] thead th {
+        color: var(--muted-foreground);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.025em;
+        text-transform: uppercase;
+    }
+
+    [data-admin-layout] tbody tr {
+        transition: background-color 160ms ease;
+    }
+
+    [data-admin-layout] tbody tr:hover {
+        background-color: color-mix(in oklch, var(--muted) 55%, transparent);
+    }
+
+    [data-admin-layout] tbody td {
+        line-height: 1.45;
+        vertical-align: middle;
+    }
+
+    [data-admin-layout] table a {
+        font-weight: 500;
+        text-underline-offset: 3px;
+    }
+
+    [data-admin-layout] .border-dashed {
+        background-color: color-mix(in oklch, var(--muted) 45%, transparent);
+    }
 }
 
 .dark {
@@ -138,6 +238,28 @@
     }
 
     body {
-        @apply bg-background text-foreground;
+        @apply bg-background text-foreground overflow-x-clip;
+    }
+
+    img,
+    video,
+    iframe {
+        max-width: 100%;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+        min-width: 0;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    p,
+    dd {
+        overflow-wrap: anywhere;
     }
 }

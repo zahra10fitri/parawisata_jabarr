@@ -11,9 +11,9 @@ export default function AlertError({
     return (
         <Alert variant="destructive">
             <AlertCircleIcon />
-            <AlertTitle>{title || 'Something went wrong.'}</AlertTitle>
+            <AlertTitle>{title || 'Periksa kembali data Anda.'}</AlertTitle>
             <AlertDescription>
-                <ul className="list-inside list-disc text-sm">
+                <ul className="mt-1 list-inside list-disc space-y-1 text-sm leading-5">
                     {Array.from(new Set(errors)).map((error, index) => (
                         <li key={index}>{error}</li>
                     ))}

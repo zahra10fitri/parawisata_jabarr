@@ -51,7 +51,7 @@ export default function DeleteDestinasiDialog({
                                     {error}
                                 </p>
                             ))}
-                            <DialogFooter className="mt-4 gap-2">
+                            <DialogFooter className="mt-4 gap-2 [&_button]:w-full sm:[&_button]:w-auto">
                                 <DialogClose asChild>
                                     <Button
                                         variant="outline"

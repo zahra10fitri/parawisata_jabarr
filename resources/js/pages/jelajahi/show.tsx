@@ -42,7 +42,7 @@ export default function DetailWisata({ wisata }: { wisata: ExploreDetail }) {
                         </p>
                     )}
                 </div>
-                <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] bg-[#e3eadb] sm:aspect-[21/9]">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-[#e3eadb] sm:aspect-[21/9] sm:rounded-[2rem]">
                     {wisata.foto_url ? (
                         <img
                             src={wisata.foto_url}
@@ -153,7 +153,7 @@ export default function DetailWisata({ wisata }: { wisata: ExploreDetail }) {
                     </div>
                     <aside
                         aria-label="Informasi kunjungan"
-                        className="rounded-3xl border border-[#193e32]/10 bg-[#fffef9] p-6 sm:p-8"
+                        className="rounded-3xl border border-[#193e32]/10 bg-[#fffef9] p-5 sm:p-8 lg:sticky lg:top-6"
                     >
                         <h2 className="mb-6 font-serif text-2xl">
                             Rencanakan kunjunganmu
@@ -202,7 +202,7 @@ export default function DetailWisata({ wisata }: { wisata: ExploreDetail }) {
                     </aside>
                 </div>
                 <section className="mt-14 border-t border-[#193e32]/15 pt-10">
-                    <div className="mb-6 flex items-baseline justify-between gap-3">
+                    <div className="mb-6 flex flex-wrap items-baseline justify-between gap-3">
                         <h2 className="font-serif text-3xl">
                             Sekilas dari dekat
                         </h2>

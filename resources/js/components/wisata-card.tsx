@@ -6,7 +6,7 @@ import type { ExploreWisata } from '@/types/jelajahi';
 
 export default function WisataCard({ wisata }: { wisata: ExploreWisata }) {
     return (
-        <article className="group overflow-hidden rounded-3xl border border-[#193e32]/10 bg-[#fffef9] transition-shadow hover:shadow-lg">
+        <article className="group overflow-hidden rounded-3xl border border-[#193e32]/10 bg-[#fffef9] shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl focus-within:ring-2 focus-within:ring-[#17613f]/30">
             <Link
                 href={show(wisata.slug)}
                 className="block h-full"
@@ -21,7 +21,7 @@ export default function WisataCard({ wisata }: { wisata: ExploreWisata }) {
                             className="h-full w-full object-cover transition-transform duration-500 motion-safe:group-hover:scale-105"
                         />
                     ) : (
-                        <div className="flex h-full items-center justify-center text-[#78917d]">
+                        <div className="flex h-full items-center justify-center bg-[linear-gradient(145deg,#e3eadb,#c5d8bc)] text-[#78917d]">
                             <Mountain
                                 size={64}
                                 strokeWidth={1}
@@ -35,7 +35,7 @@ export default function WisataCard({ wisata }: { wisata: ExploreWisata }) {
                             Pilihan unggulan
                         </span>
                     )}
-                    <span className="absolute right-4 bottom-4 flex size-10 items-center justify-center rounded-full bg-white text-[#245b43]">
+                    <span className="absolute right-4 bottom-4 flex size-10 items-center justify-center rounded-full bg-white text-[#245b43] shadow-sm transition-transform duration-300 group-hover:rotate-6 group-hover:scale-105">
                         <ArrowUpRight size={20} aria-hidden="true" />
                     </span>
                 </div>

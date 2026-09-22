@@ -17,26 +17,26 @@ export default function Pagination({
     return (
         <nav
             aria-label="Pagination data"
-            className="flex flex-wrap items-center justify-between gap-3"
+            className="grid grid-cols-2 items-center gap-3 sm:grid-cols-[1fr_auto_1fr]"
         >
             {previousUrl ? (
-                <Button variant="outline" asChild>
+                <Button variant="outline" className="w-full sm:w-auto sm:justify-self-start" asChild>
                     <Link href={previousUrl}>Sebelumnya</Link>
                 </Button>
             ) : (
-                <Button variant="outline" disabled>
+                <Button variant="outline" className="w-full sm:w-auto sm:justify-self-start" disabled>
                     Sebelumnya
                 </Button>
             )}
-            <span className="text-muted-foreground text-sm">
+            <span className="text-muted-foreground col-span-2 row-start-1 text-center text-sm sm:col-span-1 sm:col-start-2">
                 Halaman {currentPage} dari {lastPage}
             </span>
             {nextUrl ? (
-                <Button variant="outline" asChild>
+                <Button variant="outline" className="w-full sm:w-auto sm:justify-self-end" asChild>
                     <Link href={nextUrl}>Berikutnya</Link>
                 </Button>
             ) : (
-                <Button variant="outline" disabled>
+                <Button variant="outline" className="w-full sm:w-auto sm:justify-self-end" disabled>
                     Berikutnya
                 </Button>
             )}
