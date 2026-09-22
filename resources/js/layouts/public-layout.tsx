@@ -45,6 +45,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
                             <ArrowUpRight size={16} aria-hidden="true" />
                         </Link>
                         <Link href="/paket-perjalanan" className="hidden hover:underline md:inline">Paket Perjalanan</Link>
+                        <Link href="/inspirasi" className="hidden hover:underline md:inline">Inspirasi</Link>
                         <Link href="/rencanakan-perjalanan" className="hidden hover:underline lg:inline">Rencanakan Perjalanan</Link>
                     </nav>
                 </div>

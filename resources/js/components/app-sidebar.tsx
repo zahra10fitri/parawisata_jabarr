@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { BookOpen, FolderGit2, LayoutGrid, MapPin } from 'lucide-react';
+import { BookOpen, FileText, FolderGit2, LayoutGrid, MailQuestion, MapPin, Tags } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -19,6 +19,9 @@ import { index as tempatWisataIndex } from '@/routes/admin/tempat-wisata';
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
+    { title: 'Artikel', href: '/admin/artikel', icon: FileText },
+    { title: 'Kategori Artikel', href: '/admin/kategori-artikel', icon: Tags },
+    { title: 'Permintaan Perjalanan', href: '/admin/permintaan-perjalanan', icon: MailQuestion },
     { title: 'Paket Perjalanan', href: '/admin/paket-perjalanan', icon: MapPin },
     {
         title: 'Tempat Wisata',

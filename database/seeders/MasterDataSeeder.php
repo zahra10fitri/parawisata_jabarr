@@ -14,6 +14,7 @@ class MasterDataSeeder extends Seeder
                 PengalamanSeeder::class,
                 AktivitasSeeder::class,
                 FasilitasSeeder::class,
+                KategoriArtikelSeeder::class,
             ]);
         });
     }

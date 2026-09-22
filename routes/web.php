@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\Admin\ArtikelController;
 use App\Http\Controllers\Admin\DestinasiController;
+use App\Http\Controllers\Admin\InquiryController as AdminInquiryController;
 use App\Http\Controllers\Admin\ItineraryController;
+use App\Http\Controllers\Admin\KategoriArtikelController;
 use App\Http\Controllers\Admin\PaketPerjalananController as AdminPaketPerjalananController;
 use App\Http\Controllers\Admin\TempatWisataController;
 use App\Http\Controllers\InquiryController;
+use App\Http\Controllers\InspirasiController;
 use App\Http\Controllers\JelajahiController;
 use App\Http\Controllers\PaketPerjalananController;
 use Illuminate\Support\Facades\Route;
@@ -17,11 +21,18 @@ Route::get('paket-perjalanan', [PaketPerjalananController::class, 'index'])->nam
 Route::get('paket-perjalanan/{paketPerjalanan:slug}', [PaketPerjalananController::class, 'show'])->name('paket-perjalanan.show');
 Route::get('rencanakan-perjalanan', [InquiryController::class, 'create'])->name('inquiry.create');
 Route::post('rencanakan-perjalanan', [InquiryController::class, 'store'])->name('inquiry.store');
+Route::get('inspirasi', [InspirasiController::class, 'index'])->name('inspirasi.index');
+Route::get('inspirasi/{artikel:slug}', [InspirasiController::class, 'show'])->name('inspirasi.show');
 
 Route::middleware(['auth', 'can:access-admin', 'verified'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');
 
     Route::prefix('admin')->name('admin.')->group(function (): void {
+        Route::get('permintaan-perjalanan', [AdminInquiryController::class, 'index'])->name('inquiry.index');
+        Route::resource('kategori-artikel', KategoriArtikelController::class)->only(['index', 'store', 'update', 'destroy'])->parameters(['kategori-artikel' => 'kategori_artikel']);
+        Route::resource('artikel', ArtikelController::class)->parameters(['artikel' => 'artikel']);
+        Route::get('permintaan-perjalanan/{inquiry}', [AdminInquiryController::class, 'show'])->name('inquiry.show');
+        Route::patch('permintaan-perjalanan/{inquiry}/status', [AdminInquiryController::class, 'updateStatus'])->name('inquiry.status.update');
         Route::resource('destinasi', DestinasiController::class)->parameters(['destinasi' => 'destinasi']);
         Route::resource('tempat-wisata', TempatWisataController::class)->parameters(['tempat-wisata' => 'tempat_wisata']);
         Route::resource('paket-perjalanan', AdminPaketPerjalananController::class)->parameters(['paket-perjalanan' => 'paket_perjalanan']);

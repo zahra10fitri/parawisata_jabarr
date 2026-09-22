@@ -1,0 +1,1 @@
+import { Head } from '@inertiajs/react'; import ArtikelForm from './form'; export default function Edit({artikel,options}:{artikel:any;options:any}) { return <div className="mx-auto max-w-4xl p-6"><Head title="Edit Artikel"/><h1 className="mb-6 text-2xl font-semibold">Edit Artikel</h1><ArtikelForm artikel={artikel} options={options}/></div> }

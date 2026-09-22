@@ -1,0 +1,1 @@
+import { Head } from '@inertiajs/react'; import ArtikelForm from './form'; export default function Create({options}:{options:any}) { return <div className="mx-auto max-w-4xl p-6"><Head title="Tambah Artikel"/><h1 className="mb-6 text-2xl font-semibold">Tambah Artikel</h1><ArtikelForm options={options}/></div> }

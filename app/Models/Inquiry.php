@@ -12,6 +12,8 @@ class Inquiry extends Model
 {
     public const STATUS_BARU = 'BARU';
 
+    public const STATUSES = ['BARU', 'DIPROSES', 'PENAWARAN DIKIRIM', 'MENUNGGU PEMBAYARAN', 'PEMBAYARAN DIVERIFIKASI', 'PERJALANAN DIKONFIRMASI', 'SELESAI', 'DIBATALKAN', 'DITOLAK'];
+
     protected $table = 'inquiry';
 
     protected function casts(): array
