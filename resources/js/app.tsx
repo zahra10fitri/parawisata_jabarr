@@ -8,21 +8,34 @@ import PublicLayout from '@/layouts/public-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const pagesWithPublicLayout = new Set([
+    'welcome',
+    'destinasi/show',
+    'tentang',
+    'pencarian/index',
+    'paket-perjalanan/index',
+    'paket-perjalanan/show',
+    'inspirasi/index',
+    'inspirasi/show',
+    'kontak',
+    'inquiry/create',
+]);
 
 void createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
     layout: (name) => {
         switch (true) {
-            case name === 'welcome':
+            case pagesWithPublicLayout.has(name):
                 return null;
-            case name.startsWith('jelajahi/'):
-                return PublicLayout;
             case name.startsWith('auth/'):
                 return AuthLayout;
             case name.startsWith('settings/'):
                 return [AppLayout, SettingsLayout];
-            default:
+            case name === 'dashboard':
+            case name.startsWith('admin/'):
                 return AppLayout;
+            default:
+                return PublicLayout;
         }
     },
     strictMode: true,

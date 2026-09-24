@@ -9,6 +9,8 @@ use App\Http\Requests\Admin\UpdatePengalamanRequest;
 use App\Models\Pengalaman;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
@@ -23,7 +25,11 @@ class PengalamanController extends Controller
         $this->search($query, $search);
 
         return Inertia::render('admin/pengalaman/index', [
-            'items' => $query->orderBy('nama')->paginate(15)->appends(['search' => $search]),
+            'items' => $query->orderBy('nama')->paginate(15)->appends(['search' => $search])
+                ->through(fn (Pengalaman $pengalaman): array => [
+                    ...$pengalaman->toArray(),
+                    'foto_url' => $pengalaman->ikon_atau_gambar === null ? null : Storage::disk('public')->url($pengalaman->ikon_atau_gambar),
+                ]),
             'filters' => ['search' => $search],
         ]);
     }
@@ -32,6 +38,7 @@ class PengalamanController extends Controller
     {
         $data = $request->validated();
         $data['slug'] = $this->slug($data['nama']);
+        $data['ikon_atau_gambar'] = $this->storePhoto($data['ikon_atau_gambar'] ?? null);
         Pengalaman::query()->create($data);
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Pengalaman berhasil ditambahkan.']);
 
@@ -42,6 +49,15 @@ class PengalamanController extends Controller
     {
         $data = $request->validated();
         $data['slug'] = $this->slug($data['nama'], $pengalaman->id);
+        $photo = $data['ikon_atau_gambar'] ?? null;
+        if ($photo !== null) {
+            if ($pengalaman->ikon_atau_gambar !== null) {
+                Storage::disk('public')->delete($pengalaman->ikon_atau_gambar);
+            }
+            $data['ikon_atau_gambar'] = $this->storePhoto($photo);
+        } else {
+            unset($data['ikon_atau_gambar']);
+        }
         $pengalaman->update($data);
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Pengalaman berhasil diperbarui.']);
 
@@ -54,6 +70,9 @@ class PengalamanController extends Controller
             throw ValidationException::withMessages(['pengalaman' => 'Pengalaman masih digunakan dan tidak dapat dihapus. Nonaktifkan jika tidak ingin menampilkannya.']);
         }
 
+        if ($pengalaman->ikon_atau_gambar !== null) {
+            Storage::disk('public')->delete($pengalaman->ikon_atau_gambar);
+        }
         $pengalaman->delete();
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Pengalaman berhasil dihapus.']);
 
@@ -78,5 +97,10 @@ class PengalamanController extends Controller
         }
 
         return $slug;
+    }
+
+    private function storePhoto(?UploadedFile $photo): ?string
+    {
+        return $photo?->store('pengalaman', 'public');
     }
 }

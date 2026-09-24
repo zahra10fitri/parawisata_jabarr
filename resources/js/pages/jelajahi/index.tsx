@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowRight, Compass, Search } from 'lucide-react';
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import WisataCard from '@/components/wisata-card';
+import PublicHero from '@/components/public-hero';
 import { index } from '@/routes/jelajahi';
 import type { ExploreOption, ExplorePagination } from '@/types/jelajahi';
 
@@ -44,33 +45,13 @@ export default function Jelajahi({
                     content="Temukan tempat wisata Jawa Barat. Jelajahi destinasi, pilih pengalaman, dan temukan informasi untuk perjalananmu."
                 />
             </Head>
-            <div className="mx-auto max-w-7xl px-5 pt-6 sm:px-8 sm:pt-8">
-                <section className="relative isolate overflow-hidden rounded-[2rem] bg-[#234f3c] px-7 py-14 text-white sm:px-12 sm:py-20">
-                    {heroPhoto && (
-                        <img
-                            src={heroPhoto}
-                            alt=""
-                            fetchPriority="high"
-                            className="absolute inset-0 -z-20 h-full w-full object-cover"
-                        />
-                    )}
-                    <div className="absolute inset-0 -z-10 bg-linear-to-r from-[#123c2e]/95 via-[#123c2e]/75 to-[#123c2e]/25" />
-                    <p className="mb-5 flex items-center gap-2 text-xs font-medium tracking-[0.2em] text-[#d6e7ca] uppercase">
-                        <Compass size={16} aria-hidden="true" /> Jelajahi Jawa
-                        Barat
-                    </p>
-                    <h1 className="max-w-2xl font-serif text-4xl leading-[1.08] tracking-tight sm:text-6xl lg:text-7xl">
-                        Lebih dekat dengan
-                        <br />
-                        <span className="text-[#d6e7ca]">
-                            alam & cerita baru.
-                        </span>
-                    </h1>
-                    <p className="mt-6 max-w-md text-sm leading-relaxed text-white/85 sm:text-base">
-                        Dari perjalanan kecil hingga pengalaman yang berkesan.
-                        Temukan sudut Jawa Barat yang ingin kamu jelajahi.
-                    </p>
-                </section>
+            <PublicHero
+                eyebrow="Jelajahi Jawa Barat"
+                title="Lebih dekat dengan alam & cerita baru"
+                description="Dari perjalanan kecil hingga pengalaman yang berkesan. Temukan sudut Jawa Barat yang ingin kamu jelajahi."
+                imageUrl={heroPhoto}
+            />
+            <div className="mx-auto max-w-7xl px-5 sm:px-8">
                 <section
                     aria-label="Cari tempat wisata"
                     className="relative mx-auto -mt-5 max-w-6xl rounded-2xl border border-[#193e32]/10 bg-[#fffef9] p-5 shadow-lg shadow-[#193e32]/5 sm:p-6"

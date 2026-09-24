@@ -1,5 +1,6 @@
 import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft, Clock3, MapPin, Mountain, Sun, Ticket } from 'lucide-react';
+import PublicHero from '@/components/public-hero';
 import { index } from '@/routes/jelajahi';
 import { ticketPrice } from '@/types/jelajahi';
 import type { ExploreDetail } from '@/types/jelajahi';
@@ -15,6 +16,15 @@ export default function DetailWisata({ wisata }: { wisata: ExploreDetail }) {
                     />
                 )}
             </Head>
+            <PublicHero
+                eyebrow={wisata.destinasi.nama}
+                title={wisata.nama}
+                description={
+                    wisata.deskripsi_singkat ||
+                    'Temukan pengalaman wisata pilihan di Jawa Barat.'
+                }
+                imageUrl={wisata.foto_url}
+            />
             <div className="mx-auto max-w-7xl px-5 pt-8 sm:px-8">
                 <Link
                     href={index()}

@@ -25,7 +25,7 @@ class StorePengalamanRequest extends FormRequest
         return [
             'nama' => ['required', 'string', 'max:255'],
             'deskripsi' => ['nullable', 'string'],
-            'ikon_atau_gambar' => ['nullable', 'string', 'max:255'],
+            'ikon_atau_gambar' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
             'status' => ['required', 'boolean'],
             'slug' => ['prohibited'],
         ];

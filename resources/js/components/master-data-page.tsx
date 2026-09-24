@@ -18,6 +18,7 @@ type MasterItem = {
     inquiry_count?: number;
     deskripsi?: string | null;
     ikon_atau_gambar?: string | null;
+    foto_url?: string | null;
 };
 
 type PaginatedItems = {
@@ -37,6 +38,7 @@ type Config = {
     path: string;
     description: string;
     hasDetails?: boolean;
+    hasImageUpload?: boolean;
 };
 
 export default function MasterDataPage({ items, filters, config }: { items: PaginatedItems; filters: { search: string }; config: Config }) {
@@ -68,16 +70,17 @@ function MasterCard({ item, config }: { item: MasterItem; config: Config }) {
         return <MasterForm item={item} config={config} onDone={() => setEditing(false)}/>;
     }
 
-    return <article className="rounded-xl border bg-card p-5 shadow-sm"><div className="flex items-start justify-between gap-3"><div className="min-w-0"><h2 className="font-semibold break-words">{item.nama}</h2><p className="text-muted-foreground mt-1 truncate text-xs">/{item.slug}</p></div><Badge variant={item.status ? 'default' : 'secondary'}>{item.status ? 'Aktif' : 'Nonaktif'}</Badge></div>{item.deskripsi && <p className="text-muted-foreground mt-4 line-clamp-2 text-sm">{item.deskripsi}</p>}<div className="text-muted-foreground mt-4 text-sm"><p>{item.tempat_wisata_count} Tempat Wisata terkait</p>{item.inquiry_count !== undefined && <p>{item.inquiry_count} permintaan terkait</p>}</div><div className="mt-5 flex flex-wrap gap-2"><Button size="sm" variant="outline" onClick={() => setEditing(true)}><Pencil/>Edit</Button><Button size="sm" variant="destructive" disabled={usage > 0} title={usage > 0 ? 'Data yang masih digunakan tidak dapat dihapus' : undefined} onClick={() => confirm(`Hapus ${config.singular.toLowerCase()} “${item.nama}”?`) && router.delete(`${config.path}/${item.id}`, { preserveScroll: true })}><Trash2/>Hapus</Button></div></article>;
+    return <article className="rounded-xl border bg-card p-5 shadow-sm"><div className="flex items-start justify-between gap-3">{config.hasImageUpload && <div className="size-14 shrink-0 overflow-hidden rounded-lg bg-muted">{item.foto_url && <img src={item.foto_url} alt="" className="h-full w-full object-cover"/>}</div>}<div className="min-w-0 flex-1"><h2 className="font-semibold break-words">{item.nama}</h2><p className="text-muted-foreground mt-1 truncate text-xs">/{item.slug}</p></div><Badge variant={item.status ? 'default' : 'secondary'}>{item.status ? 'Aktif' : 'Nonaktif'}</Badge></div>{item.deskripsi && <p className="text-muted-foreground mt-4 line-clamp-2 text-sm">{item.deskripsi}</p>}<div className="text-muted-foreground mt-4 text-sm"><p>{item.tempat_wisata_count} Tempat Wisata terkait</p>{item.inquiry_count !== undefined && <p>{item.inquiry_count} permintaan terkait</p>}</div><div className="mt-5 flex flex-wrap gap-2"><Button size="sm" variant="outline" onClick={() => setEditing(true)}><Pencil/>Edit</Button><Button size="sm" variant="destructive" disabled={usage > 0} title={usage > 0 ? 'Data yang masih digunakan tidak dapat dihapus' : undefined} onClick={() => confirm(`Hapus ${config.singular.toLowerCase()} “${item.nama}”?`) && router.delete(`${config.path}/${item.id}`, { preserveScroll: true })}><Trash2/>Hapus</Button></div></article>;
 }
 
 function MasterForm({ item, config, onDone }: { item?: MasterItem; config: Config; onDone: () => void }) {
-    const form = useForm({ nama: item?.nama ?? '', status: item?.status ?? true, deskripsi: item?.deskripsi ?? '', ikon_atau_gambar: item?.ikon_atau_gambar ?? '' });
+    const form = useForm<any>({ nama: item?.nama ?? '', status: item?.status ?? true, deskripsi: item?.deskripsi ?? '', ikon_atau_gambar: null });
     function submit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         const options = { preserveScroll: true, onSuccess: () => { if (!item) form.reset(); onDone(); } };
-        if (item) form.put(`${config.path}/${item.id}`, options); else form.post(config.path, options);
+        form.transform((data) => ({ ...data, ...(item ? { _method: 'put' } : {}) }));
+        form.post(item ? `${config.path}/${item.id}` : config.path, { ...options, forceFormData: true });
     }
 
-    return <form onSubmit={submit} className="rounded-xl border bg-card p-5 shadow-sm"><div className="grid gap-4"><label><Label>Nama *</Label><Input className="mt-2" required maxLength={255} value={form.data.nama} onChange={event => form.setData('nama', event.target.value)}/><InputError message={form.errors.nama}/></label>{config.hasDetails && <><label><Label>Deskripsi</Label><textarea className="border-input mt-2 min-h-24 w-full rounded-md border bg-transparent px-3 py-2 text-sm" value={form.data.deskripsi} onChange={event => form.setData('deskripsi', event.target.value)}/><InputError message={form.errors.deskripsi}/></label><label><Label>Ikon atau referensi gambar</Label><Input className="mt-2" maxLength={255} value={form.data.ikon_atau_gambar} onChange={event => form.setData('ikon_atau_gambar', event.target.value)}/><InputError message={form.errors.ikon_atau_gambar}/></label></>}<label className="flex items-center gap-2 text-sm font-medium"><input type="checkbox" checked={form.data.status} onChange={event => form.setData('status', event.target.checked)}/> Aktif</label><InputError message={form.errors.status}/><div className="flex flex-wrap gap-2"><Button disabled={form.processing}>{form.processing ? 'Menyimpan...' : item ? 'Simpan perubahan' : 'Tambah data'}</Button>{item && <Button type="button" variant="outline" onClick={onDone}>Batal</Button>}</div></div></form>;
+    return <form onSubmit={submit} className="rounded-xl border bg-card p-5 shadow-sm"><div className="grid gap-4"><label><Label>Nama *</Label><Input className="mt-2" required maxLength={255} value={form.data.nama} onChange={event => form.setData('nama', event.target.value)}/><InputError message={form.errors.nama}/></label>{config.hasDetails && <><label><Label>Deskripsi</Label><textarea className="border-input mt-2 min-h-24 w-full rounded-md border bg-transparent px-3 py-2 text-sm" value={form.data.deskripsi} onChange={event => form.setData('deskripsi', event.target.value)}/><InputError message={form.errors.deskripsi}/></label>{config.hasImageUpload ? <label><Label>Foto</Label>{item?.foto_url && !form.data.ikon_atau_gambar && <img src={item.foto_url} alt="Preview foto pengalaman" className="mt-2 h-40 w-full rounded-lg border object-cover"/>}<Input className="mt-2" type="file" accept="image/jpeg,image/png,image/webp" onChange={event => form.setData('ikon_atau_gambar', event.target.files?.[0] ?? null)}/><InputError message={form.errors.ikon_atau_gambar}/></label> : <label><Label>Ikon atau referensi gambar</Label><Input className="mt-2" maxLength={255} value={item?.ikon_atau_gambar ?? ''} disabled/></label>}</>}<label className="flex items-center gap-2 text-sm font-medium"><input type="checkbox" checked={form.data.status} onChange={event => form.setData('status', event.target.checked)}/> Aktif</label><InputError message={form.errors.status}/><div className="flex flex-wrap gap-2"><Button disabled={form.processing}>{form.processing ? 'Menyimpan...' : item ? 'Simpan perubahan' : 'Tambah data'}</Button>{item && <Button type="button" variant="outline" onClick={onDone}>Batal</Button>}</div></div></form>;
 }
